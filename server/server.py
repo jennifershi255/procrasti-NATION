@@ -8,26 +8,21 @@ from db import get_database
 from datetime import datetime
 from classifier import classify
 
+# load environment variables from .env file
 load_dotenv()
 
+# Retrives API key for Cohere from the environment variables
 api_key = os.getenv("API_KEY")
 co = cohere.Client(api_key=api_key)
 
 app = Flask(__name__)
-CORS(app, support_credentials=True)
-@cross_origin(supports_credentials=True)
-
-
-@app.route('/', methods=['GET'])
-def test():
-    return "Hello World"
+CORS(app)
 
 @app.route('/excuse', methods=['POST'])
 def excuses():
-    data = request.get_json()
-    print(data)
+    data = request.get_json() # converts incoming JSON into a python dictionary
     task = data['task']
-    excuse_type = data['type_of_res']
+    excuse_type = data['type_of_res'] #type_of_res refers to 
 
     response = co.chat(
         model="command-r-plus",
@@ -38,11 +33,13 @@ def excuses():
         db = get_database()
         history_collection = db['history']
         now = datetime.now().strftime("%Y-%m-%d")
+        # stores request in database
         history_collection.insert_one({"task": task, "urgency": urgency, "date": now, "response": response.text})
     except:
         return jsonify({"response" : response.text, "urgency": "unknown"})
     return jsonify({"response" : response.text, "urgency": urgency})
 
+# Retrieves past excuse data
 @app.route('/history', methods=['GET'])
 def history_function():
     db = get_database()
