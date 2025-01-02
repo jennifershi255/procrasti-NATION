@@ -54,7 +54,6 @@ const UrgencySlider = (urgency) => {
 
 const Form = () => {
   const [task, setTask] = useState("");
-//   const [mood, setMood] = useState("");
   let [results, setResults] = useState(null);
   const [type, setType] = useState(""); // State to handle type
   const [loading, setLoading] = useState(false); // State to handle loading

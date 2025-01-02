@@ -2,8 +2,6 @@ import React from 'react';
 import GetStartedButton from './Button.jsx';
 import Rocket from "../components/Rocket";
 
-
-
 function Hero() {
   return (
 
